@@ -162,7 +162,9 @@ class DetailsRenderer {
    * @protected
    */
   renderNode(item) {
-    throw new Error('Not yet implemented', item);
+    const element = this._dom.createElement('span', 'lh-node');
+    element.textContent = item.description || item.text;
+    return element;
   }
 
   /**
@@ -228,6 +230,16 @@ DetailsRenderer.DetailsJSON; // eslint-disable-line no-unused-expressions
  * }}
  */
 DetailsRenderer.ListDetailsJSON; // eslint-disable-line no-unused-expressions
+
+/**
+ * @typedef {{
+ *     type: string,
+ *     text: ({text: string}|undefined),
+ *     path: ({text: string}|undefined)
+ *     description: ({text: string}|undefined)
+ * }}
+ */
+DetailsRenderer.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
 
 /** @typedef {{
  *     type: string,
