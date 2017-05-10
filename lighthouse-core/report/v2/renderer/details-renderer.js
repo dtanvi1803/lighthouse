@@ -108,6 +108,8 @@ class DetailsRenderer {
    * @return {!Element}
    */
   _renderList(list) {
+    if (!list.items.length) return this._dom.createElement('span');
+
     const element = this._dom.createElement('details', 'lh-details');
     if (list.header) {
       const summary = this._dom.createElement('summary', 'lh-list__header');
@@ -115,11 +117,11 @@ class DetailsRenderer {
       element.appendChild(summary);
     }
 
-    const itemsElem = this._dom.createElement('div', 'lh-list__items');
+    const itemsElem = this._dom.createChildOf(element, 'div', 'lh-list__items');
     for (const item of list.items) {
-      itemsElem.appendChild(this.render(item));
+      const itemElem = this._dom.createChildOf(itemsElem, 'span', 'lh-list__item');
+      itemElem.appendChild(this.render(item));
     }
-    element.appendChild(itemsElem);
     return element;
   }
 
@@ -163,7 +165,12 @@ class DetailsRenderer {
    */
   renderNode(item) {
     const element = this._dom.createElement('span', 'lh-node');
-    element.textContent = item.description || item.text;
+    element.textContent = item.snippet;
+    element.title = item.selector;
+    if (item.text) element.setAttribute('data-text', item.text);
+    if (item.path) element.setAttribute('data-path', item.path);
+    if (item.selector) element.setAttribute('data-selector', item.selector);
+    if (item.snippet) element.setAttribute('data-snippet', item.snippet);
     return element;
   }
 
@@ -234,9 +241,10 @@ DetailsRenderer.ListDetailsJSON; // eslint-disable-line no-unused-expressions
 /**
  * @typedef {{
  *     type: string,
- *     text: ({text: string}|undefined),
- *     path: ({text: string}|undefined)
- *     description: ({text: string}|undefined)
+ *     text: (string|undefined),
+ *     path: (string|undefined),
+ *     selector: (string|undefined),
+ *     snippet:(string|undefined)
  * }}
  */
 DetailsRenderer.NodeDetailsJSON; // eslint-disable-line no-unused-expressions
