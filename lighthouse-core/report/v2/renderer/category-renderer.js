@@ -332,8 +332,10 @@ class CategoryRenderer {
     const metricAuditsEl = this._renderAuditGroup(groups['perf-metric']);
 
     const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
-    if (thumbnailAudit && Array.isArray(thumbnailAudit.result.rawValue)) {
-      const filmstripEl = this._renderFilmstrip(thumbnailAudit.result.rawValue);
+    if (thumbnailAudit && thumbnailAudit.result && Array.isArray(thumbnailAudit.result.rawValue)) {
+      const thumbnails = /** @type {!Array<!CategoryRenderer.FilmstripThumbnail>} */
+          (thumbnailAudit.result.rawValue);
+      const filmstripEl = this._renderFilmstrip(thumbnails);
       metricAuditsEl.appendChild(filmstripEl);
     }
 
