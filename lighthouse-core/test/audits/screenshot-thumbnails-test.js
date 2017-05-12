@@ -39,10 +39,10 @@ describe('Screenshot thumbnails', () => {
         assert.equal(expectedData.length, result.data.length);
       });
 
-      assert.equal(results.rawValue[0].timing, 0);
-      assert.equal(results.rawValue[2].timing, 182);
+      assert.equal(results.rawValue[0].timing, 82);
+      assert.equal(results.rawValue[2].timing, 245);
       assert.equal(results.rawValue[9].timing, 818);
-      assert.equal(results.rawValue[0].timestamp, 225414172015);
+      assert.equal(results.rawValue[0].timestamp, 225414253815);
     });
   });
 });

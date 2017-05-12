@@ -68,7 +68,7 @@ class ScreenshotThumbnails extends Audit {
     return {
       width: scaledWidth,
       height: scaledHeight,
-      data: outPixels
+      data: outPixels,
     };
   }
 
@@ -84,12 +84,11 @@ class ScreenshotThumbnails extends Audit {
       const thumbnails = [];
       const analyzedFrames = speedline.frames.filter(frame => !frame.isProgressInterpolated());
 
-      for (let i = 0; i < NUMBER_OF_THUMBNAILS; i++) {
-        const targetTimestamp = speedline.beginning + speedline.complete * i /
-            (NUMBER_OF_THUMBNAILS - 1);
+      for (let i = 1; i <= NUMBER_OF_THUMBNAILS; i++) {
+        const targetTimestamp = speedline.beginning + speedline.complete * i / NUMBER_OF_THUMBNAILS;
 
         let targetFrame = null;
-        if (i === NUMBER_OF_THUMBNAILS - 1) {
+        if (i === NUMBER_OF_THUMBNAILS) {
           targetFrame = analyzedFrames[analyzedFrames.length - 1];
         } else {
           analyzedFrames.forEach(frame => {
