@@ -291,6 +291,34 @@ class CategoryRenderer {
   }
 
   /**
+   * @param {!Array<!CategoryRenderer.FilmstripThumbnail>} thumbnails
+   * @return {!Element}
+   */
+  _renderFilmstrip(thumbnails) {
+    const filmstripEl = this._dom.createElement('div', 'lh-filmstrip');
+
+    for (const thumbnail of thumbnails) {
+      const frameEl = this._dom.createChildOf(filmstripEl, 'div', 'lh-filmstrip__frame');
+
+      let timing = thumbnail.timing.toLocaleString() + ' ms';
+      if (thumbnail.timing > 1000) {
+        timing = Math.round(thumbnail.timing / 100) / 10 + ' s';
+      }
+
+      const timingEl = this._dom.createChildOf(frameEl, 'div', 'lh-filmstrip__timestamp');
+      timingEl.textContent = timing;
+
+      const base64data = thumbnail.data;
+      this._dom.createChildOf(frameEl, 'img', 'lh-filmstrip__thumbnail', {
+        src: `data:image/jpeg;base64,${base64data}`,
+        alt: `Screenshot at ${timing}`,
+      });
+    }
+
+    return filmstripEl;
+  }
+
+  /**
    * @param {!ReportRenderer.CategoryJSON} category
    * @param {!Object<string, !ReportRenderer.GroupJSON>} groups
    * @return {!Element}
@@ -302,6 +330,13 @@ class CategoryRenderer {
 
     const metricAudits = category.audits.filter(audit => audit.group === 'perf-metric');
     const metricAuditsEl = this._renderAuditGroup(groups['perf-metric']);
+
+    const thumbnailAudit = category.audits.find(audit => audit.id === 'screenshot-thumbnails');
+    if (thumbnailAudit && Array.isArray(thumbnailAudit.result.rawValue)) {
+      const filmstripEl = this._renderFilmstrip(thumbnailAudit.result.rawValue);
+      metricAuditsEl.appendChild(filmstripEl);
+    }
+
     metricAudits.forEach(item => metricAuditsEl.appendChild(this._renderAudit(item)));
     metricAuditsEl.open = true;
     element.appendChild(metricAuditsEl);
@@ -328,7 +363,8 @@ class CategoryRenderer {
     }
 
     const passedElements = category.audits
-        .filter(audit => audit.group !== 'perf-metric' && audit.score === 100)
+        .filter(audit => (audit.group === 'perf-hint' || audit.group === 'perf-info') &&
+            audit.score === 100)
         .map(audit => this._renderAudit(audit));
 
     if (!passedElements.length) return element;
@@ -407,3 +443,12 @@ if (typeof module !== 'undefined' && module.exports) {
  * }}
  */
 CategoryRenderer.PerfHintExtendedInfo; // eslint-disable-line no-unused-expressions
+
+/**
+ * @typedef {{
+ *    timing: number,
+ *    timestamp: number,
+ *    data: string,
+ * }}
+ */
+CategoryRenderer.FilmstripThumbnail; // eslint-disable-line no-unused-expressions

@@ -56,6 +56,7 @@ module.exports = {
     "first-meaningful-paint",
     "load-fast-enough-for-pwa",
     "speed-index-metric",
+    "screenshot-thumbnails",
     "estimated-input-latency",
     // "time-to-firstbyte",
     "first-interactive",
@@ -668,8 +669,9 @@ module.exports = {
         {"id": "total-byte-weight", "weight": 0, "group": "perf-info"},
         {"id": "dom-size", "weight": 0, "group": "perf-info"},
         {"id": "critical-request-chains", "weight": 0, "group": "perf-info"},
-        {"id": "user-timings", "weight": 0, "group": "perf-info"}
+        {"id": "user-timings", "weight": 0, "group": "perf-info"},
 
+        {"id": "screenshot-thumbnails", "weight": 0},
       ]
     },
     "accessibility": {
