@@ -36,6 +36,13 @@ class ScreenshotThumbnails extends Audit {
     };
   }
 
+  /**
+   * Scales down an image to THUMBNAIL_HEIGHT using nearest neighbor for speed, maintains aspect
+   * ratio of the original thumbnail.
+   *
+   * @param {{width: number, height: number, data: !Array<number>}} imageData
+   * @return {{width: number, height: number, data: !Array<number>}}
+   */
   static scaleImageToThumbnail(imageData) {
     const scaledHeight = THUMBNAIL_HEIGHT;
     const scaleFactor = imageData.height / scaledHeight;
