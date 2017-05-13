@@ -16,7 +16,7 @@
  */
 'use strict';
 
-/* global window, document */
+/* global window, document, Node */
 
 const Gatherer = require('./gatherer');
 const fs = require('fs');
@@ -62,13 +62,12 @@ function runA11yChecks() {
   //   https://github.com/ChromeDevTools/devtools-frontend/blob/7a2e162ddefd/front_end/sdk/DOMModel.js#L530-L552
   // TODO: Doesn't handle frames or shadow roots...
   function getNodePath(node) {
-    /* global Node */
     function getNodeIndex(node) {
       let index = 0;
       while (node = node.previousSibling) {
         // skip empty text nodes
         if (node.nodeType === Node.TEXT_NODE &&
-            node.textContent.trim().length === 0) continue;
+          node.textContent.trim().length === 0) continue;
         index++;
       }
       return index;
@@ -84,6 +83,11 @@ function runA11yChecks() {
     return path.join(',');
   }
 
+  /**
+   * Gets the opening tag text of the given node.
+   * @param {!Node}
+   * @return {string}
+   */
   function getOuterHTMLSnippet(node) {
     const reOpeningTag = /^.*?\>/;
     const match = node.outerHTML.match(reOpeningTag);
