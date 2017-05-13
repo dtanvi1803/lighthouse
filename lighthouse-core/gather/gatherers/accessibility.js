@@ -58,7 +58,7 @@ function runA11yChecks() {
     return axeResult;
   });
 
-  // Adapated from DevTools' SDK.DOMNode.prototype.path
+  // Adapted from DevTools' SDK.DOMNode.prototype.path
   //   https://github.com/ChromeDevTools/devtools-frontend/blob/7a2e162ddefd/front_end/sdk/DOMModel.js#L530-L552
   // TODO: Doesn't handle frames or shadow roots...
   function getNodePath(node) {
