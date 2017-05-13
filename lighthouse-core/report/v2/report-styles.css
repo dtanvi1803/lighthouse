@@ -129,13 +129,6 @@ summary {
   margin-bottom: 2px;
 }
 
-.lh-list__item::after {
-  content: ', ';
-}
-.lh-list__item:last-child::after {
-  content: '';
-}
-
 /* Node */
 .lh-node {
   display: block;
