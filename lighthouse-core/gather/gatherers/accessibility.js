@@ -49,8 +49,12 @@ function runA11yChecks() {
     axeResult.violations.forEach(v => v.nodes.forEach(node => {
       node.path = getNodePath(node.element);
       node.snippet = getOuterHTMLSnippet(node.element);
+      // avoid circular JSON concerns
+      node.element = node.any = node.all = node.none = undefined;
     }));
 
+    // We only need violations, and circular references are possible outside of violations
+    axeResult = {violations: axeResult.violations};
     return axeResult;
   });
 
@@ -100,7 +104,10 @@ class Accessibility extends Gatherer {
     })()`;
 
     return driver.evaluateAsync(expression).then(returnedValue => {
-      if (!returnedValue || !Array.isArray(returnedValue.violations)) {
+      if (!returnedValue) {
+        throw new Error('No axe-core results returned');
+      }
+      if (!Array.isArray(returnedValue.violations)) {
         throw new Error('Unable to parse axe results' + returnedValue);
       }
       return returnedValue;
