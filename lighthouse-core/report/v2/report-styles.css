@@ -392,6 +392,7 @@ summary {
 
 .lh-filmstrip__thumbnail {
   border: 1px solid var(--report-secondary-border-color);
+  max-height: 100px;
 }
 
 /* Sparkline */

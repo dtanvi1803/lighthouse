@@ -20,7 +20,7 @@ const Audit = require('./audit');
 const jpeg = require('jpeg-js');
 
 const NUMBER_OF_THUMBNAILS = 10;
-const THUMBNAIL_HEIGHT = 100;
+const THUMBNAIL_WIDTH = 60;
 
 class ScreenshotThumbnails extends Audit {
   /**
@@ -37,16 +37,16 @@ class ScreenshotThumbnails extends Audit {
   }
 
   /**
-   * Scales down an image to THUMBNAIL_HEIGHT using nearest neighbor for speed, maintains aspect
+   * Scales down an image to THUMBNAIL_WIDTH using nearest neighbor for speed, maintains aspect
    * ratio of the original thumbnail.
    *
    * @param {{width: number, height: number, data: !Array<number>}} imageData
    * @return {{width: number, height: number, data: !Array<number>}}
    */
   static scaleImageToThumbnail(imageData) {
-    const scaledHeight = THUMBNAIL_HEIGHT;
-    const scaleFactor = imageData.height / scaledHeight;
-    const scaledWidth = Math.floor(imageData.width / scaleFactor);
+    const scaledWidth = THUMBNAIL_WIDTH;
+    const scaleFactor = imageData.width / scaledWidth;
+    const scaledHeight = Math.floor(imageData.height / scaleFactor);
 
     const outPixels = new Uint8Array(scaledWidth * scaledHeight * 4);
 
@@ -87,23 +87,23 @@ class ScreenshotThumbnails extends Audit {
       for (let i = 1; i <= NUMBER_OF_THUMBNAILS; i++) {
         const targetTimestamp = speedline.beginning + speedline.complete * i / NUMBER_OF_THUMBNAILS;
 
-        let targetFrame = null;
+        let frameForTimestamp = null;
         if (i === NUMBER_OF_THUMBNAILS) {
-          targetFrame = analyzedFrames[analyzedFrames.length - 1];
+          frameForTimestamp = analyzedFrames[analyzedFrames.length - 1];
         } else {
           analyzedFrames.forEach(frame => {
             if (frame.getTimeStamp() <= targetTimestamp) {
-              targetFrame = frame;
+              frameForTimestamp = frame;
             }
           });
         }
 
-        const imageData = targetFrame.getParsedImage();
+        const imageData = frameForTimestamp.getParsedImage();
         const thumbnailImageData = ScreenshotThumbnails.scaleImageToThumbnail(imageData);
-        const base64Data = cachedThumbnails.get(targetFrame) ||
+        const base64Data = cachedThumbnails.get(frameForTimestamp) ||
             jpeg.encode(thumbnailImageData, 90).data.toString('base64');
 
-        cachedThumbnails.set(targetFrame, base64Data);
+        cachedThumbnails.set(frameForTimestamp, base64Data);
         thumbnails.push({
           timing: Math.round(targetTimestamp - speedline.beginning),
           timestamp: targetTimestamp * 1000,
