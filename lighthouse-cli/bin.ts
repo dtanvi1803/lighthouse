@@ -30,7 +30,6 @@ const lighthouse = require('../lighthouse-core');
 const log = require('../lighthouse-core/lib/log');
 import * as path from 'path';
 const perfOnlyConfig = require('../lighthouse-core/config/perf.json');
-const a11yOnlyConfig = require('../lighthouse-core/config/a11y.json');
 const performanceXServer = require('./performance-experiment/server');
 import * as Printer from './printer';
 import * as randomPort from './random-port';
@@ -67,8 +66,6 @@ if (cliFlags.configPath) {
   config = require(cliFlags.configPath);
 } else if (cliFlags.perf) {
   config = perfOnlyConfig;
-} else if (cliFlags.a11y) {
-  config = a11yOnlyConfig;
 }
 
 // set logging preferences
