@@ -27,7 +27,7 @@ const MIN_TASK_CLUSTER_FMP_DISTANCE = 5000;
 
 const MAX_QUIET_WINDOW_SIZE = 5000;
 const TRACE_BUSY_MSG = 'The main thread was busy for the entire trace recording. ' +
-   'First Interactive requires the main thread to reach a more idle state.';
+   'First Interactive requires the main thread to be idle for several seconds.';
 
 // Window size should be three seconds at 15 seconds after FMP
 const EXPONENTIATION_COEFFICIENT = -Math.log(3 - 1) / 15;
